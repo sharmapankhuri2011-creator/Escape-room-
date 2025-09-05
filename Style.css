@@ -1,1 +1,55 @@
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  background: #222;
+  color: #fff;
+  margin: 0;
+  padding: 20px;
+}
 
+h1 {
+  color: gold;
+}
+
+#question-box {
+  background: #333;
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  display: inline-block;
+}
+
+input {
+  padding: 10px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 6px;
+}
+
+button {
+  margin: 10px;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  background: gold;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: orange;
+}
+
+#doors {
+  margin-top: 20px;
+}
+
+.door {
+  font-size: 20px;
+}
+
+#message {
+  margin-top: 20px;
+  font-size: 18px;
+  color: lightgreen;
+}
