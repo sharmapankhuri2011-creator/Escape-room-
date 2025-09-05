@@ -1,5 +1,5 @@
 // Full question bank
-let questionBank = [
+const questionBank = [
   // Linear Equations
   { question: "A movie ticket costs $12. If you buy x tickets and spend $60, how many tickets did you buy?", answer: "5" },
   { question: "Sara has 3 more than twice the number of apples than Tom. If Sara has 11 apples, how many does Tom have?", answer: "4" },
@@ -45,36 +45,17 @@ let questionBank = [
   { question: "What is cos(60°)?", answer: "0.5" }
 ];
 
-// Variables
-let currentRoom = 1;
+// Helper to shuffle and pick 10 random unique questions
+function getRandomQuestions(arr, num) {
+  let shuffled = [...arr].sort(() => 0.5 - Math.random());
+  return shuffled.slice(0, num);
+}
+
+let questions = getRandomQuestions(questionBank, 10);
+
 let keys = 0;
 let currentQuestion = -1;
-let questions = [];
 
-// Function to pick 10 random questions
-function pickRandomQuestions() {
-  let selected = [];
-  while (selected.length < 10) {
-    let randIndex = Math.floor(Math.random() * questionBank.length);
-    let q = questionBank[randIndex];
-    if (!selected.includes(q)) selected.push(q);
-  }
-  return selected;
-}
-
-// Start Room
-function startRoom(roomNum) {
-  currentRoom = roomNum;
-  keys = 0;
-  currentQuestion = -1;
-  questions = pickRandomQuestions();
-  document.getElementById("room-info").innerText = "Room " + roomNum;
-  document.getElementById("keys").innerText = "Keys Collected: " + keys;
-  document.getElementById("message").innerText = "";
-  nextQuestion();
-}
-
-// Questions
 function nextQuestion() {
   currentQuestion++;
   if (currentQuestion < questions.length) {
@@ -82,38 +63,31 @@ function nextQuestion() {
     document.getElementById("answer").value = "";
     document.getElementById("message").innerText = "";
   } else {
-    document.getElementById("question").innerText = "🎉 No more questions! Use keys to open the door.";
+    document.getElementById("question").innerText = "🎉 No more questions! You escaped!";
   }
 }
 
 function checkAnswer() {
   let userAns = document.getElementById("answer").value.trim().toLowerCase();
   let correctAns = questions[currentQuestion].answer.toLowerCase();
+
+  // Allow multiple answers (e.g., "3,-3")
   let correctArr = correctAns.split(",");
   if (correctArr.includes(userAns)) {
     keys++;
     document.getElementById("keys").innerText = "Keys Collected: " + keys;
     document.getElementById("message").innerText = "✅ Correct! You earned a key.";
   } else {
-    document.getElementById("message").innerText = "❌ Wrong! The creature is coming...";
+    document.getElementById("message").innerText = "❌ Wrong! Try again.";
   }
 }
 
-// Doors
 function openDoor(doorNum) {
+  let message = "";
   if (keys >= doorNum) {
-    if (currentRoom === 1) {
-      document.getElementById("message").innerText = "🚪 Door opened! Welcome to Room 2!";
-      startRoom(2); // Move to next room
-    } else {
-      document.getElementById("message").innerText = "🎉 You opened the final door! You escaped the Algebra Escape Room!";
-      document.getElementById("question").innerText = "";
-      document.getElementById("doors").style.display = "none";
-    }
+    message = `🚪 Door ${doorNum} opened!`;
   } else {
-    document.getElementById("message").innerText = `🔒 Door ${doorNum} is locked. You need ${doorNum} keys.`;
+    message = `🔒 Door ${doorNum} is locked. You need ${doorNum} keys.`;
   }
+  document.getElementById("message").innerText = message;
 }
-
-// Initialize game
-startRoom(1);
