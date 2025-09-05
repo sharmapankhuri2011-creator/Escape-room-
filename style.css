@@ -2,22 +2,27 @@
 @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&display=swap');
 
 /* ===== General Reset ===== */
+/* Educational Note: Good contrast is important for readability!
+   White or light colors on dark backgrounds work best.
+   We keep Dancing Script only for the title for style,
+   but use simple fonts for important game content. */
 body {
   margin: 0;
   padding: 0;
-  font-family: 'Dancing Script', cursive;
-  color: #ff0000; /* global text color = red */
+  font-family: Arial, Helvetica, sans-serif; /* Clear, readable font for game content */
+  color: #ffffff; /* White text for better contrast on dark background */
   text-align: center;
   background: url('backgroundimage.png') no-repeat center center fixed;
   background-size: cover;
 }
 
-/* Heading uses the same font but large (96px) as requested */
+/* Heading keeps decorative font for style */
 h1 {
-  font-family: 'Dancing Script', cursive;
-  color: #ff0000;
-  font-size: 96px;
+  font-family: 'Dancing Script', cursive; /* Decorative font just for the title */
+  color: #ffcc00; /* Golden yellow - more visible than red on dark */
+  font-size: 72px; /* Still large but more balanced */
   margin: 16px 0;
+  text-shadow: 3px 3px 6px rgba(0,0,0,0.8); /* Shadow for better readability */
 }
 
 /* ===== Game Container ===== */
@@ -31,13 +36,14 @@ h1 {
 }
 
 /* ===== Timer ===== */
-/* made large so it reads like the 96px you wanted (matches heading size) */
+/* Educational Note: Timer should be big enough to see but not overwhelming */
 #timer {
-  font-size: 96px;
+  font-size: 48px; /* Large enough to see clearly but not too big */
   font-weight: 700;
-  color: #ff0000;
+  color: #ff6b6b; /* Softer red that's easier on the eyes */
   margin-bottom: 20px;
   text-shadow: 2px 2px 5px black;
+  font-family: 'Courier New', monospace; /* Monospace font for numbers looks cleaner */
 }
 
 /* ===== Door Image ===== */
@@ -66,13 +72,19 @@ h1 {
 
 /* ===== Question & Message ===== */
 #question {
-  font-size: 1.5rem;
-  margin: 15px 0;
+  font-size: 1.3rem; /* Good size for reading math problems */
+  margin: 15px 20px; /* Add side margin for long questions */
+  line-height: 1.6; /* Better line spacing for readability */
+  color: #fff; /* White for best contrast */
+  background: rgba(0,0,0,0.6); /* Semi-transparent background */
+  padding: 15px;
+  border-radius: 10px;
 }
 
 #message {
   font-size: 1.2rem;
   margin-top: 10px;
+  font-weight: bold; /* Make feedback messages stand out */
 }
 
 /* ===== Keys Container ===== */
@@ -115,22 +127,209 @@ button:hover {
   background: #e68900;
 }
 
-/* ===== Monster Overlay ===== */
-#monster-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
+/* ===== Magical Start Screen ===== */
+/* Educational Note: Creating a magical portal effect with CSS animations */
+#start-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 70vh;
+  position: relative;
+}
+
+.magical-portal {
+  position: relative;
+  width: 300px;
+  height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 50px 0;
+}
+
+/* Glowing rings that pulse around the portal */
+.portal-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 2px solid;
+  animation: portal-pulse 3s ease-in-out infinite;
+}
+
+.ring-1 {
+  width: 250px;
+  height: 250px;
+  border-color: #ff00ff;
+  animation-delay: 0s;
+}
+
+.ring-2 {
+  width: 280px;
+  height: 280px;
+  border-color: #00ffff;
+  animation-delay: 1s;
+}
+
+.ring-3 {
+  width: 310px;
+  height: 310px;
+  border-color: #ffff00;
+  animation-delay: 2s;
+}
+
+@keyframes portal-pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.3;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+}
+
+/* The magical portal button */
+.portal-button {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #6a0dad, #1a0033);
+  border: 3px solid #ffcc00;
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 
+    0 0 30px #6a0dad,
+    inset 0 0 30px rgba(255, 204, 0, 0.3);
+  animation: portal-glow 2s ease-in-out infinite;
+}
+
+.portal-button:hover {
+  transform: scale(1.1);
+  box-shadow: 
+    0 0 50px #ffcc00,
+    inset 0 0 50px rgba(255, 204, 0, 0.5);
+  background: radial-gradient(circle at 30% 30%, #8b0fdf, #2a0055);
+}
+
+@keyframes portal-glow {
+  0%, 100% {
+    box-shadow: 
+      0 0 30px #6a0dad,
+      inset 0 0 30px rgba(255, 204, 0, 0.3);
+  }
+  50% {
+    box-shadow: 
+      0 0 60px #6a0dad,
+      inset 0 0 40px rgba(255, 204, 0, 0.5);
+  }
+}
+
+.portal-text {
+  font-family: 'Dancing Script', cursive;
+  font-size: 3rem;
+  color: #ffcc00;
+  text-shadow: 
+    0 0 10px #ffcc00,
+    0 0 20px #ffcc00;
+  font-weight: bold;
+}
+
+.portal-subtext {
+  font-size: 1rem;
+  color: #fff;
+  opacity: 0.8;
+  font-style: italic;
+  margin-top: -10px;
+}
+
+/* Floating magical particles */
+.magic-particles {
+  position: absolute;
   width: 100%;
   height: 100%;
-  background: rgba(0,0,0,0.9);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  color: white;
-  font-size: 2rem;
-  z-index: 999;
+  pointer-events: none;
 }
+
+.magic-particles::before,
+.magic-particles::after {
+  content: '✨';
+  position: absolute;
+  font-size: 20px;
+  animation: float-particle 6s linear infinite;
+}
+
+.magic-particles::before {
+  left: 10%;
+  animation-delay: 0s;
+}
+
+.magic-particles::after {
+  right: 10%;
+  animation-delay: 3s;
+}
+
+@keyframes float-particle {
+  0% {
+    transform: translateY(100px) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-100px) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+/* Instructions styling */
+.start-instructions {
+  text-align: center;
+  margin-top: 30px;
+  animation: fade-in 2s ease-in;
+}
+
+.start-instructions p {
+  font-size: 1.2rem;
+  margin: 10px 0;
+  color: #ffcc00;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+}
+
+.timer-warning {
+  color: #ff6b6b !important;
+  font-size: 1.4rem !important;
+  animation: warning-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes warning-pulse {
+  0%, 100% {
+    opacity: 0.7;
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 
 /* ===== Monster Overlay ===== */
 /* hidden by default */
@@ -157,4 +356,44 @@ button:hover {
 #monster-overlay img {
   max-width: 400px;
   border-radius: 15px;
+}
+
+/* ===== Confetti Animation ===== */
+/* Educational Note: This creates falling confetti pieces for the victory screen */
+.confetti {
+  position: fixed;
+  width: 10px;
+  height: 10px;
+  top: -10px; /* Start above the screen */
+  z-index: 1000;
+  /* Animation makes confetti fall and rotate */
+  animation: confetti-fall linear forwards;
+}
+
+@keyframes confetti-fall {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    /* Fall down the height of the screen + extra, with rotation */
+    transform: translateY(100vh) rotate(720deg);
+    opacity: 0; /* Fade out as it falls */
+  }
+}
+
+/* ===== Victory Screen Enhancements ===== */
+/* Make the victory message stand out more */
+#question h2 {
+  animation: victory-pulse 1s ease-in-out infinite;
+  text-shadow: 3px 3px 10px rgba(255,204,0,0.5);
+}
+
+@keyframes victory-pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
 }
