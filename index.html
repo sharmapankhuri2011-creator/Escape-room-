@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Escape Room Quiz</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>🔑 Escape Room Quiz 🚪</h1>
+  
+  <div id="question-box">
+    <p id="question">Click "Next Question" to start!</p>
+    <input type="text" id="answer" placeholder="Type your answer...">
+    <button onclick="checkAnswer()">Submit Answer</button>
+    <button onclick="nextQuestion()">Next Question</button>
+  </div>
+  
+  <p id="keys">Keys Collected: 0</p>
+  
+  <div id="doors">
+    <button class="door" onclick="openDoor(1)">🚪 Door 1</button>
+    <button class="door" onclick="openDoor(2)">🚪 Door 2</button>
+  </div>
+
+  <p id="message"></p>
+
+  <script src="script.js"></script>
+</body>
+</html>
