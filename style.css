@@ -1,55 +1,138 @@
+/* Import Dancing Script from Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&display=swap');
+
+/* ===== General Reset ===== */
 body {
-  font-family: Arial, sans-serif;
-  text-align: center;
-  background: #222;
-  color: #fff;
   margin: 0;
-  padding: 20px;
+  padding: 0;
+  font-family: 'Dancing Script', cursive;
+  color: #ff0000; /* global text color = red */
+  text-align: center;
+  background: url('backgroundimage.png') no-repeat center center fixed;
+  background-size: cover;
 }
 
+/* Heading uses the same font but large (96px) as requested */
 h1 {
-  color: gold;
+  font-family: 'Dancing Script', cursive;
+  color: #ff0000;
+  font-size: 96px;
+  margin: 16px 0;
 }
 
-#question-box {
-  background: #333;
+/* ===== Game Container ===== */
+#game-container {
+  max-width: 800px;
+  margin: 0 auto;
   padding: 20px;
-  border-radius: 12px;
-  margin-bottom: 20px;
-  display: inline-block;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 15px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
 }
 
-input {
-  padding: 10px;
+/* ===== Timer ===== */
+/* made large so it reads like the 96px you wanted (matches heading size) */
+#timer {
+  font-size: 96px;
+  font-weight: 700;
+  color: #ff0000;
+  margin-bottom: 20px;
+  text-shadow: 2px 2px 5px black;
+}
+
+/* ===== Door Image ===== */
+#door-image {
+  width: 300px;
+  height: auto;
+  border: 5px solid #fff;
+  border-radius: 15px;
+  margin: 20px auto;
+  display: block;
+  transition: transform 0.3s ease-in-out;
+}
+
+/* Unlock animation */
+.unlock-anim {
+  animation: shake 0.4s ease-in-out;
+}
+
+@keyframes shake {
+  0% { transform: rotate(0deg); }
+  25% { transform: rotate(5deg); }
+  50% { transform: rotate(-5deg); }
+  75% { transform: rotate(5deg); }
+  100% { transform: rotate(0deg); }
+}
+
+/* ===== Question & Message ===== */
+#question {
+  font-size: 1.5rem;
+  margin: 15px 0;
+}
+
+#message {
+  font-size: 1.2rem;
   margin-top: 10px;
+}
+
+/* ===== Keys Container ===== */
+#keys-container {
+  margin: 15px 0;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.key-icon {
+  width: 40px;
+  height: 40px;
+}
+
+/* ===== Input & Buttons ===== */
+#answer {
+  padding: 10px;
+  font-size: 1rem;
+  width: 200px;
+  margin-top: 10px;
+  border-radius: 8px;
   border: none;
-  border-radius: 6px;
 }
 
 button {
   margin: 10px;
   padding: 12px 20px;
+  font-size: 1rem;
   border: none;
-  border-radius: 8px;
-  background: gold;
-  font-size: 16px;
+  border-radius: 10px;
+  background: #ff9800;
+  color: white;
   cursor: pointer;
+  transition: background 0.3s ease;
 }
 
 button:hover {
-  background: orange;
+  background: #e68900;
 }
 
-#doors {
-  margin-top: 20px;
+/* ===== Monster Overlay ===== */
+#monster-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  color: white;
+  font-size: 2rem;
+  z-index: 999;
 }
 
-.door {
-  font-size: 20px;
-}
-
-#message {
-  margin-top: 20px;
-  font-size: 18px;
-  color: lightgreen;
+#monster-overlay img {
+  max-width: 400px;
+  border-radius: 15px;
 }
