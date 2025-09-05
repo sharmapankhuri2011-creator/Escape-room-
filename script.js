@@ -215,3 +215,34 @@ showNextDoor();
 $("#answer").addEventListener("keydown", (e) => {
   if (e.key === "Enter") checkAnswer();
 });
+
+function restartGame() {
+  // Reset game state
+  keys = 0;
+  currentQ = -1;
+  timerStarted = false;
+  timeLeft = 240; // 4 minutes
+  clearInterval(timerId);
+
+  // Hide overlays
+  $("#monster-overlay").hidden = true;
+  $("#win-overlay").hidden = true;
+
+  // Reset UI
+  $("#keys-container").innerHTML = "";
+  $("#question").textContent = "Click “Next Question” to start!";
+  $("#answer").value = "";
+  $("#message").textContent = "";
+  $("#answer").disabled = false;
+  $("#submitBtn").disabled = false;
+  $("#nextBtn").disabled = false;
+
+  // Fresh set of 10 questions
+  const freshQs = shufflePick(questionBank, TOTAL_DOORS);
+  questions.length = 0;
+  questions.push(...freshQs);
+
+  // Reset doors and timer
+  showNextDoor();
+  updateTimer();
+}
