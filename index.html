@@ -1,29 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Escape Room Quiz</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>The Escape Room...</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h1>🔑 Escape Room Quiz 🚪</h1>
-  
-  <div id="question-box">
-    <p id="question">Click "Next Question" to start!</p>
-    <input type="text" id="answer" placeholder="Type your answer...">
-    <button onclick="checkAnswer()">Submit Answer</button>
-    <button onclick="nextQuestion()">Next Question</button>
-  </div>
-  
-  <p id="keys">Keys Collected: 0</p>
-  
-  <div id="doors">
-    <button class="door" onclick="openDoor(1)">🚪 Door 1</button>
-    <button class="door" onclick="openDoor(2)">🚪 Door 2</button>
+  <h1>🔑 The Escape Room... 🚪</h1>
+
+  <!-- Start Button -->
+  <div id="start-container">
+    <button id="start-btn" onclick="startGame()">Start Game</button>
   </div>
 
-  <p id="message"></p>
+  <!-- Game UI (hidden until Start is clicked) -->
+  <div id="game-container" style="display: none;">
+    <div id="timer">Time Left: 04:00</div>
+
+    <img id="door-image" src="door1.png" alt="Door" />
+
+    <div id="keys-container"></div>
+
+    <div id="question">Click “Next Question” to start!</div>
+
+    <input id="answer" type="text" placeholder="Enter your answer" />
+    <br />
+    <button id="submitBtn" onclick="checkAnswer()">Submit</button>
+    <button id="nextBtn" onclick="nextQuestion()">Next Question</button>
+
+    <div id="message"></div>
+  </div>
+
+  <!-- Monster Overlay (hidden by default) -->
+  <div id="monster-overlay" hidden>
+    <img src="monster.png" alt="Monster" />
+    <p>💀 The monster caught you!</p>
+  </div>
 
   <script src="script.js"></script>
 </body>
