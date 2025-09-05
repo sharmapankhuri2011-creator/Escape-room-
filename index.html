@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- Meta tags tell the browser how to display the page -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>The Escape Room...</title>
@@ -9,35 +10,64 @@
 <body>
   <h1>🔑 The Escape Room... 🚪</h1>
 
-  <!-- Start Button -->
+  <!-- Start Screen - Magical Portal -->
+  <!-- This div shows first, then hides when game starts -->
   <div id="start-container">
-    <button id="start-btn" onclick="startGame()">Start Game</button>
+    <div class="magical-portal">
+      <!-- Glowing rings around the portal -->
+      <div class="portal-ring ring-1"></div>
+      <div class="portal-ring ring-2"></div>
+      <div class="portal-ring ring-3"></div>
+      
+      <!-- The magical door/portal button -->
+      <button id="start-btn" class="portal-button" onclick="startGame()">
+        <span class="portal-text">Enter</span>
+        <span class="portal-subtext">if you dare...</span>
+      </button>
+      
+      <!-- Floating particles for magical effect -->
+      <div class="magic-particles"></div>
+    </div>
+    
+    <!-- Instructions text -->
+    <div class="start-instructions">
+      <p>⚠️ Solve 10 puzzles to escape before the monster finds you! ⚠️</p>
+      <p class="timer-warning">You have only 4 minutes...</p>
+    </div>
   </div>
 
   <!-- Game UI (hidden until Start is clicked) -->
+  <!-- style="display: none" makes this invisible at first -->
   <div id="game-container" style="display: none;">
     <div id="timer">Time Left: 04:00</div>
 
     <img id="door-image" src="door1.png" alt="Door" />
 
+    <!-- This container will hold the key icons you earn -->
     <div id="keys-container"></div>
 
-    <div id="question">Click “Next Question” to start!</div>
+    <div id="question">Click "Next Question" to start!</div>
 
+    <!-- Input field where players type their answers -->
     <input id="answer" type="text" placeholder="Enter your answer" />
     <br />
+    <!-- onclick attributes connect buttons to JavaScript functions -->
     <button id="submitBtn" onclick="checkAnswer()">Submit</button>
+    <button id="prevBtn" onclick="prevQuestion()">Previous Question</button>
     <button id="nextBtn" onclick="nextQuestion()">Next Question</button>
 
+    <!-- Success/failure messages appear here -->
     <div id="message"></div>
   </div>
 
   <!-- Monster Overlay (hidden by default) -->
-  <div id="monster-overlay" hidden>
+  <!-- Shows when time runs out - now removed 'hidden' attribute since CSS handles it -->
+  <div id="monster-overlay" style="display: none;">
     <img src="monster.png" alt="Monster" />
     <p>💀 The monster caught you!</p>
   </div>
 
+  <!-- This loads our JavaScript code -->
   <script src="script.js"></script>
 </body>
 </html>

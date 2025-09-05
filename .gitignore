@@ -1,0 +1,23 @@
+# OS generated files
+.DS_Store
+
+# Editor directories and files
+.idea/
+.vscode/
+.playwright*/
+
+# Dependencies (if any added in future)
+node_modules/
+
+# Build outputs (if any added in future)
+dist/
+build/
+
+# Environment variables (if any added in future)
+*.env
+
+# AI model files
+.claude/
+CLAUDE.md
+AGENTS.md
+GEMINI.md

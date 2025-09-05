@@ -1,19 +1,27 @@
 /* ===== Game Setup ===== */
-const TOTAL_DOORS = 10;
-let keys = 0;
-let currentQ = -1;
-let timerStarted = false;
-let timeLeft = 240; // 4 minutes
-let timerId = null;
+// Educational Note: These are GLOBAL VARIABLES - they store the game's "state"
+// The game state tells us what's happening in the game at any moment
+const TOTAL_DOORS = 10;  // const means this value never changes
+let keys = 0;             // let means this value can change
+let currentQ = -1;        // Start at -1 because we increment before showing
+let timerStarted = false; // Boolean flag to prevent multiple timers
+let timeLeft = 240;       // 4 minutes = 240 seconds
+let timerId = null;       // Will store the timer ID so we can stop it later
+
+// New: Track which questions have been solved (array of true/false)
+let solvedQuestions = new Array(TOTAL_DOORS).fill(false);
 
 /* ===== DOM references ===== */
+// Educational Note: DOM means Document Object Model - it's how JavaScript talks to HTML
+// This $ function is a shortcut for document.querySelector
+// It finds HTML elements by their ID or class
 const $ = (sel) => document.querySelector(sel);
-const doorImg = $("#door-image");
-const msg = $("#message");
-const timerEl = $("#timer");
-const questionEl = $("#question");
-const answerEl = $("#answer");
-const keysContainer = $("#keys-container");
+const doorImg = $("#door-image");        // The door image element
+const msg = $("#message");              // Where we show correct/incorrect messages
+const timerEl = $("#timer");            // The countdown timer display
+const questionEl = $("#question");      // Where questions appear
+const answerEl = $("#answer");          // The input box for answers
+const keysContainer = $("#keys-container"); // Where key icons appear
 
 /* ===== Question bank ===== */
 const questionBank = [
@@ -39,19 +47,29 @@ const questionBank = [
   { question: "The parabola y = x^2 opens in which direction?", answer: "up" },
   { question: "What is sin(30°)?", answer: "0.5" },
   { question: "What is cos(60°)?", answer: "0.5" },
-  { question: "Two pipes can fill a tank. Pope A can fill it in 6 hours, and Pipe B can fill it in 4 hours. The tank has a leak that empties 1/3 of the tank per hour. If both pipes are open, how long does it take to fill?", answer: "" },
+  // Math Solution: Pipe A fills 1/6 per hour, Pipe B fills 1/4 per hour
+  // Together they fill 1/6 + 1/4 = 5/12 per hour
+  // Leak empties 1/3 per hour, so net fill = 5/12 - 1/3 = 5/12 - 4/12 = 1/12 per hour
+  // Time to fill = 1 ÷ (1/12) = 12 hours
+  { question: "Two pipes can fill a tank. Pipe A can fill it in 6 hours, and Pipe B can fill it in 4 hours. The tank has a leak that empties 1/3 of the tank per hour. If both pipes are open, how long does it take to fill?", answer: "12" },
   { question: "A bag has 5 red, 4 blue, and 3 green balls. Two balls are drawn without replacement. What's the probability that they are different colors?. Answer in fraction form.", answer: "47/66" },
-  { question: "Two trains are 300 km apart, moving toward each other. One moves at 60 km/h, the other at 40 km/h. A bird flies back and forth between them at 90 km/h until they meet. How far does the bird travel?", answer: "" }
+  // Math Solution: Combined speed = 60 + 40 = 100 km/h (approaching each other)
+  // Time to meet = 300 km ÷ 100 km/h = 3 hours
+  // Bird flies for 3 hours at 90 km/h = 270 km
+  { question: "Two trains are 300 km apart, moving toward each other. One moves at 60 km/h, the other at 40 km/h. A bird flies back and forth between them at 90 km/h until they meet. How far does the bird travel?", answer: "270" }
 ];
 
 /* ===== Randomize questions ===== */
+// Educational Note: This uses the Fisher-Yates shuffle algorithm
+// It's like shuffling a deck of cards - swap random positions many times
 function shufflePick(arr, n) {
-  const a = [...arr];
+  const a = [...arr];  // Make a copy so we don't change the original
+  // Start from the end and work backwards
   for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
+    const j = Math.floor(Math.random() * (i + 1)); // Pick random position
+    [a[i], a[j]] = [a[j], a[i]];  // Swap elements (ES6 destructuring)
   }
-  return a.slice(0, n);
+  return a.slice(0, n);  // Return first n elements
 }
 const questions = shufflePick(questionBank, TOTAL_DOORS);
 
@@ -61,13 +79,18 @@ function startGame() {
   $("#game-container").style.display = "block";
   hideMonster();
   startTimerOnce();
-  nextQuestion();
+  
+  // Start with the first question
+  currentQ = 0;
+  showQuestion();
 }
 
 /* ===== Timer ===== */
+// Educational Note: This converts seconds to MM:SS format
 function updateTimer() {
-  const m = Math.floor(timeLeft / 60);
-  const s = timeLeft % 60;
+  const m = Math.floor(timeLeft / 60);  // Get minutes by dividing by 60
+  const s = timeLeft % 60;              // Get remaining seconds with modulo
+  // padStart adds zeros: 5 becomes "05"
   timerEl.textContent = `Time Left: ${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`;
 }
 function startTimerOnce() {
@@ -84,14 +107,17 @@ function startTimerOnce() {
 }
 
 /* ===== Monster Overlay ===== */
+// Educational Note: We use style.display to show/hide elements
+// "block" makes it visible, "none" hides it completely
+// The hidden attribute doesn't work when CSS has display:none
 function showMonster() {
   disableInputs();
   const overlay = $("#monster-overlay");
-  overlay.hidden = false;
+  overlay.style.display = "flex"; // Use flex to center content
 }
 function hideMonster() {
   const overlay = $("#monster-overlay");
-  overlay.hidden = true;
+  overlay.style.display = "none"; // Hide the overlay
 }
 
 /* ===== Disable Inputs ===== */
@@ -116,44 +142,139 @@ function addKeyIcon() {
 }
 
 /* ===== Questions ===== */
-function nextQuestion() {
-  currentQ++;
-  if (currentQ < questions.length) {
-    questionEl.textContent = questions[currentQ].question;
-    answerEl.value = "";
+// Educational Note: This shows the current question and handles navigation
+function showQuestion() {
+  if (currentQ >= 0 && currentQ < questions.length) {
+    // Show question number and if it's already solved
+    const questionNum = currentQ + 1; // Add 1 because arrays start at 0
+    const solvedText = solvedQuestions[currentQ] ? " ✅" : "";
+    
+    // Display the question with its number
+    questionEl.innerHTML = `<strong>Question ${questionNum} of ${TOTAL_DOORS}${solvedText}</strong><br>` + 
+                          questions[currentQ].question;
+    
+    // Clear the answer box if this question isn't solved yet
+    if (!solvedQuestions[currentQ]) {
+      answerEl.value = "";
+      answerEl.disabled = false;
+      $("#submitBtn").disabled = false;
+    } else {
+      // If already solved, show the answer and disable input
+      answerEl.value = "Already solved!";
+      answerEl.disabled = true;
+      $("#submitBtn").disabled = true;
+    }
+    
     msg.textContent = "";
-  } else {
-    questionEl.textContent = "No more questions!";
+    
+    // Hide/show navigation buttons at boundaries
+    // Educational Note: Better UX to hide buttons that can't be used
+    if (currentQ === 0) {
+      $("#prevBtn").style.display = "none";  // Hide on first question
+    } else {
+      $("#prevBtn").style.display = "inline-block";  // Show for other questions
+    }
+    
+    if (currentQ === questions.length - 1) {
+      $("#nextBtn").style.display = "none";  // Hide on last question
+    } else {
+      $("#nextBtn").style.display = "inline-block";  // Show for other questions
+    }
+  }
+}
+
+function nextQuestion() {
+  // Move to next question if not at the end
+  if (currentQ < questions.length - 1) {
+    currentQ++;
+    showQuestion();
+  }
+}
+
+// New function: Go to previous question
+function prevQuestion() {
+  // Move to previous question if not at the beginning
+  if (currentQ > 0) {
+    currentQ--;
+    showQuestion();
   }
 }
 
 /* ===== Answer Check ===== */
+// Educational Note: Sanitizing means cleaning up the input
+// This makes "3, -3" the same as "3,-3" and "CIRCLE" same as "circle"
 function sanitize(str) {
+  // Regular expression: /\s+/g finds all spaces, g means "global" (all occurrences)
   return str.replace(/\s+/g, "").toLowerCase();
 }
 function isCorrect(user, correct) {
+  // Compare sanitized versions so small differences don't matter
   return sanitize(user) === sanitize(correct);
 }
 function checkAnswer() {
   if (currentQ < 0 || currentQ >= questions.length) return;
+  
+  // Don't check if already solved
+  if (solvedQuestions[currentQ]) {
+    msg.textContent = "You already solved this one!";
+    return;
+  }
+  
   const user = answerEl.value.trim();
   if (!user) return;
 
   const correct = questions[currentQ].answer;
   if (isCorrect(user, correct)) {
+    // Mark this question as solved
+    solvedQuestions[currentQ] = true;
+    
     keys++;
     addKeyIcon();
     msg.textContent = "✅ Correct! You got a key.";
+    
+    // Update the display to show the checkmark
+    showQuestion();
 
     if (keys < TOTAL_DOORS) {
       showNextDoor();
-      nextQuestion();
+      // Automatically move to next unsolved question
+      setTimeout(() => {
+        // Find next unsolved question
+        for (let i = currentQ + 1; i < questions.length; i++) {
+          if (!solvedQuestions[i]) {
+            currentQ = i;
+            showQuestion();
+            return;
+          }
+        }
+        // If no unsolved questions after current, look from beginning
+        for (let i = 0; i < currentQ; i++) {
+          if (!solvedQuestions[i]) {
+            currentQ = i;
+            showQuestion();
+            return;
+          }
+        }
+      }, 1000); // Wait 1 second before moving to next question
     } else {
-      clearInterval(timerId);
-      disableInputs();
+      // Victory! Player has escaped!
+      clearInterval(timerId); // Stop the timer
+      
+      // Hide the input and buttons for a cleaner victory screen
+      answerEl.style.display = "none";
+      $("#submitBtn").style.display = "none"; 
+      $("#prevBtn").style.display = "none";
+      $("#nextBtn").style.display = "none";
+      
+      // Show the victory background
       doorImg.src = "backgroundimage.png";
-      questionEl.textContent = "🎉 You unlocked all doors and escaped!";
+      
+      // Display victory message with bigger text
+      questionEl.innerHTML = "<h2 style='color: #ffcc00; font-size: 2.5rem;'>🎉 You unlocked all doors and escaped! 🎉</h2>";
       msg.textContent = "";
+      
+      // Trigger confetti animation
+      createConfetti();
     }
   } else {
     msg.textContent = "❌ No....It's getting closer....";
@@ -168,3 +289,37 @@ doorImg.src = "door1.png";
 answerEl.addEventListener("keydown", (e) => {
   if (e.key === "Enter") checkAnswer();
 });
+
+/* ===== Confetti Animation ===== */
+// Educational Note: This creates a fun particle effect for winning!
+// We create many small colored divs that fall and fade away
+function createConfetti() {
+  const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff', '#ffa500'];
+  const confettiCount = 150; // Number of confetti pieces
+  
+  for (let i = 0; i < confettiCount; i++) {
+    // Create each confetti piece with a small delay
+    setTimeout(() => {
+      const confetti = document.createElement('div');
+      confetti.className = 'confetti';
+      
+      // Random color from our array
+      confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+      
+      // Random starting position across the screen width
+      confetti.style.left = Math.random() * 100 + '%';
+      
+      // Random animation duration (2-5 seconds)
+      confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
+      
+      // Random delay before starting to fall
+      confetti.style.animationDelay = Math.random() * 0.5 + 's';
+      
+      // Add to the page
+      document.body.appendChild(confetti);
+      
+      // Remove after animation completes
+      setTimeout(() => confetti.remove(), 5000);
+    }, i * 10); // Stagger the creation for a burst effect
+  }
+}
