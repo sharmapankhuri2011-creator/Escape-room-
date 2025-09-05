@@ -1,4 +1,4 @@
-// Full question bank
+/* ===== Question bank (exactly as you sent) ===== */
 const questionBank = [
   // Linear Equations
   { question: "A movie ticket costs $12. If you buy x tickets and spend $60, how many tickets did you buy?", answer: "5" },
@@ -45,49 +45,173 @@ const questionBank = [
   { question: "What is cos(60°)?", answer: "0.5" }
 ];
 
-// Helper to shuffle and pick 10 random unique questions
-function getRandomQuestions(arr, num) {
-  let shuffled = [...arr].sort(() => 0.5 - Math.random());
-  return shuffled.slice(0, num);
+/* ===== Game state ===== */
+const TOTAL_DOORS = 10;
+let keys = 0;
+let currentQ = -1;
+let timerStarted = false;
+let timeLeft = 240; // 4 minutes (seconds)
+let timerId = null;
+
+// Pick 10 random unique questions each run
+function shufflePick(arr, n) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a.slice(0, n);
+}
+const questions = shufflePick(questionBank, TOTAL_DOORS);
+
+/* ===== DOM helpers ===== */
+const $ = (sel) => document.querySelector(sel);
+const doorImg = $("#door-image");
+const msg = $("#message");
+
+function updateTimer() {
+  const m = Math.floor(timeLeft / 60);
+  const s = timeLeft % 60;
+  $("#timer").textContent = `Time Left: ${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`;
 }
 
-let questions = getRandomQuestions(questionBank, 10);
+function startTimerOnce() {
+  if (timerStarted) return;
+  timerStarted = true;
+  timerId = setInterval(() => {
+    timeLeft--;
+    updateTimer();
+    if (timeLeft <= 0) {
+      clearInterval(timerId);
+      // If not all doors unlocked: monster!
+      if (keys < TOTAL_DOORS) showMonster();
+    }
+  }, 1000);
+}
 
-let keys = 0;
-let currentQuestion = -1;
+function showMonster() {
+  disableInputs();
+  $("#monster-overlay").hidden = false;
+}
 
+function disableInputs() {
+  $("#submitBtn").disabled = true;
+  $("#nextBtn").disabled = true;
+  $("#answer").disabled = true;
+}
+
+/* ===== Door + key visuals ===== */
+function showNextDoor() {
+  const nextIndex = Math.min(keys + 1, TOTAL_DOORS); // door images are 1..10
+  doorImg.src = `door${nextIndex}.png`;
+}
+
+function animateUnlock() {
+  doorImg.classList.add("unlock-anim");
+  setTimeout(() => doorImg.classList.remove("unlock-anim"), 450);
+}
+
+function addKeyIcon() {
+  const img = document.createElement("img");
+  img.src = "key.png";
+  $("#keys-container").appendChild(img);
+}
+
+/* ===== Question flow ===== */
 function nextQuestion() {
-  currentQuestion++;
-  if (currentQuestion < questions.length) {
-    document.getElementById("question").innerText = questions[currentQuestion].question;
-    document.getElementById("answer").value = "";
-    document.getElementById("message").innerText = "";
+  startTimerOnce();
+  currentQ++;
+  if (currentQ < questions.length) {
+    $("#question").textContent = questions[currentQ].question;
+    $("#answer").value = "";
+    msg.textContent = "";
   } else {
-    document.getElementById("question").innerText = "🎉 No more questions! You escaped!";
+    $("#question").textContent = "No more questions!";
   }
+}
+
+// Normalize + compare answers carefully
+function sanitize(str) {
+  return str.replace(/\s+/g, "").toLowerCase();
+}
+function parseNumberish(str) {
+  // decimal
+  if (/^-?\d+(\.\d+)?$/.test(str)) return parseFloat(str);
+  // fraction a/b
+  const m = str.match(/^(-?\d+)\/(-?\d+)$/);
+  if (m) {
+    const num = parseFloat(m[1]), den = parseFloat(m[2]);
+    if (den !== 0) return num / den;
+  }
+  return null;
+}
+function isCorrect(userRaw, correctRaw) {
+  const u = sanitize(userRaw);
+  const c = sanitize(correctRaw);
+
+  // Exact text match first
+  if (u === c) return true;
+
+  // Handle numeric equivalence (e.g., 0.5 == 1/2)
+  const un = parseNumberish(u);
+  const cn = parseNumberish(c);
+  if (un !== null && cn !== null && Math.abs(un - cn) < 1e-9) return true;
+
+  // Handle two-solution cases like "3,-3" (accept either order ONLY if they're opposites)
+  if (c.includes(",")) {
+    const parts = c.split(",");
+    if (parts.length === 2) {
+      const p0 = parseNumberish(parts[0]);
+      const p1 = parseNumberish(parts[1]);
+      // opposites (e.g., 3 and -3)
+      if (p0 !== null && p1 !== null && Math.abs(p0 + p1) < 1e-12) {
+        const reversed = `${parts[1]},${parts[0]}`;
+        if (u === reversed) return true;
+      }
+    }
+  }
+
+  return false;
 }
 
 function checkAnswer() {
-  let userAns = document.getElementById("answer").value.trim().toLowerCase();
-  let correctAns = questions[currentQuestion].answer.toLowerCase();
+  if (currentQ < 0 || currentQ >= questions.length) return;
+  const user = $("#answer").value.trim();
+  if (!user) return;
 
-  // Allow multiple answers (e.g., "3,-3")
-  let correctArr = correctAns.split(",");
-  if (correctArr.includes(userAns)) {
+  const correct = questions[currentQ].answer;
+
+  if (isCorrect(user, correct)) {
     keys++;
-    document.getElementById("keys").innerText = "Keys Collected: " + keys;
-    document.getElementById("message").innerText = "✅ Correct! You earned a key.";
+    addKeyIcon();
+    animateUnlock();
+
+    msg.textContent = "✅ Correct! You got a key.";
+    // Advance to the next door image immediately
+    if (keys < TOTAL_DOORS) {
+      showNextDoor();
+    }
+
+    // Win condition
+    if (keys === TOTAL_DOORS) {
+      clearInterval(timerId);
+      disableInputs();
+      $("#question").textContent = "🎉 You unlocked all 10 doors and escaped!";
+      msg.textContent = "";
+    } else {
+      // Move straight to next question
+      nextQuestion();
+    }
   } else {
-    document.getElementById("message").innerText = "❌ Wrong! Try again.";
+    msg.textContent = "❌ No....It's getting closer....";
   }
 }
 
-function openDoor(doorNum) {
-  let message = "";
-  if (keys >= doorNum) {
-    message = `🚪 Door ${doorNum} opened!`;
-  } else {
-    message = `🔒 Door ${doorNum} is locked. You need ${doorNum} keys.`;
-  }
-  document.getElementById("message").innerText = message;
-}
+/* ===== Init ===== */
+updateTimer();
+showNextDoor();
+
+// Allow Enter key to submit
+$("#answer").addEventListener("keydown", (e) => {
+  if (e.key === "Enter") checkAnswer();
+});
