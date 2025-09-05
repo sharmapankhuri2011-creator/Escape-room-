@@ -201,3 +201,25 @@ answerEl.addEventListener("keydown", (e) => {
   }
 }
 
+function showMonster() {
+  disableInputs();
+  const overlay = $("#monster-overlay");
+  // support both approaches (remove hidden attribute if present and add class)
+  overlay.hidden = false;
+  overlay.classList.add("visible");
+  // optional: make sure the monster image is the one you want
+  // overlay.querySelector("img").src = "monster.png";
+}
+
+function hideMonster() {
+  const overlay = $("#monster-overlay");
+  overlay.classList.remove("visible");
+  overlay.hidden = true;
+}
+
+function restartGame() {
+  // ... your existing reset logic ...
+  hideMonster();
+  // reset UI etc...
+}
+
