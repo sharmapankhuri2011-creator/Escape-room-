@@ -132,6 +132,28 @@ button:hover {
   z-index: 999;
 }
 
+/* ===== Monster Overlay ===== */
+/* hidden by default */
+#monster-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.9);
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  color: white;
+  font-size: 2rem;
+  z-index: 999;
+  display: none; /* hide initially */
+}
+
+/* add this class to show the overlay */
+#monster-overlay.visible {
+  display: flex;
+}
 #monster-overlay img {
   max-width: 400px;
   border-radius: 15px;
