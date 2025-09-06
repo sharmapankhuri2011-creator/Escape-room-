@@ -151,7 +151,30 @@ const spanishQuestions = [
   { question: "What is 'orange' in Spanish?", answer: "naranja" },
   { question: "What is 'brown' in Spanish?", answer: "marron" }, 
 ];
+const historyQuestions = [ 
+   { question: "Who was the first President of the United States?", answer: "george washington" },
+  { question: "In what year was the Declaration of Independence signed?", answer: "1776" },
+  { question: "Who wrote the Declaration of Independence?", answer: "thomas jefferson" },
+  { question: "What war was fought between the North and South regions of the United States?", answer: "civil war" },
+  { question: "Who delivered the Gettysburg Address?", answer: "abraham lincoln" },
+  { question: "What was the name of the ship that carried the Pilgrims to America in 1620?", answer: "mayflower" },
+  { question: "Which amendment to the U.S. Constitution abolished slavery?", answer: "13th" },
+  { question: "What was the first permanent English settlement in North America?", answer: "jamestown" },
+  { question: "Who was the principal author of the U.S. Constitution?", answer: "james madison" },
+  { question: "What purchase doubled the size of the United States in 1803?", answer: "louisiana purchase" },
+  { question: "What was the name of the agreement that ended the Revolutionary War?", answer: "treaty of paris" },
+  { question: "Who was the second President of the United States?", answer: "john adams" },
+  { question: "Which document begins with 'We the People'?", answer: "constitution" },
+  { question: "What year did the American Civil War begin?", answer: "1861" },
+  { question: "What year did the American Civil War end?", answer: "1865" },
+  { question: "Who invented the light bulb?", answer: "thomas edison" },
+  { question: "What was the Great Depression primarily caused by?", answer: "stock market crash" },
+  { question: "What year did the United States enter World War II?", answer: "1941" },
+  { question: "Who was the U.S. President during World War II?", answer: "franklin d roosevelt" },
+  { question: "Which U.S. state was the last to join the union?", answer: "hawaii" }
+];
 
+/* ===== If-then Statments for what happens when you click on each subject button ==== */ 
 function startGame(subject) {
   if (subject === "science") {
     selectedQuestions = scienceQuestions;
@@ -164,7 +187,6 @@ function startGame(subject) {
   } else if (subject === "history") {
     selectedQuestions = historyQuestions;
   }
-  
   
 /* ===== Randomize questions ===== */
 // Educational Note: This uses the Fisher-Yates shuffle algorithm
