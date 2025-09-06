@@ -23,6 +23,23 @@ const questionEl = $("#question");      // Where questions appear
 const answerEl = $("#answer");          // The input box for answers
 const keysContainer = $("#keys-container"); // Where key icons appear
 
+/* ==== Subject change === */
+let selectedQuestions = [];
+
+document.querySelectorAll(".subject-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const subject = btn.dataset.subject;
+
+    if (subject === "math") selectedQuestions = mathQuestions;
+    else if (subject === "science") selectedQuestions = scienceQuestions;
+    else if (subject === "english") selectedQuestions = englishQuestions;
+    else if (subject === "history") selectedQuestions = historyQuestions;
+    else if (subject === "spanish") selectedQuestions = spanishQuestions;
+
+    startGame();
+  });
+});
+
 /* ===== Question bank ===== */
 const mathQuestions = [
   { question: "A movie ticket costs $12. If you buy x tickets and spend $60, how many tickets did you buy?", answer: "5" },
@@ -134,6 +151,19 @@ const spanishQuestions = [
   { question: "What is 'orange' in Spanish?", answer: "naranja" },
   { question: "What is 'brown' in Spanish?", answer: "marron" }, 
 ];
+
+function startGame(subject) {
+  if (subject === "science") {
+    selectedQuestions = scienceQuestions;
+  } else if (subject === "english") {
+    selectedQuestions = englishQuestions;
+  } else if (subject === "spanish") {
+    selectedQuestions = spanishQuestions;
+  } else if (subject === "math") {
+    selectedQuestions = mathQuestions;
+  } else if (subject === "history") {
+    selectedQuestions = historyQuestions;
+  }
   
   
 /* ===== Randomize questions ===== */
@@ -148,7 +178,8 @@ function shufflePick(arr, n) {
   }
   return a.slice(0, n);  // Return first n elements
 }
-const questions = shufflePick(questionBank, TOTAL_DOORS);
+const questions = shufflePick(selectedQuestions, Math.min(TOTAL_DOORS, selectedQuestions.length));
+
 
 /* ===== Start Game ===== */
 function startGame() {
@@ -160,6 +191,8 @@ function startGame() {
   // Start with the first question
   currentQ = 0;
   showQuestion();
+  const currentQuestion = selectedQuestions[currentQuestionIndex];
+  document.getElementById("question").textContent = currentQuestion.question;
 }
 
 /* ===== Timer ===== */
