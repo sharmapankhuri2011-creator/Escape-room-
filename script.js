@@ -24,7 +24,7 @@ const answerEl = $("#answer");          // The input box for answers
 const keysContainer = $("#keys-container"); // Where key icons appear
 
 /* ===== Question bank ===== */
-const questionBank = [
+const mathQuestions = [
   { question: "A movie ticket costs $12. If you buy x tickets and spend $60, how many tickets did you buy?", answer: "5" },
   { question: "Sara has 3 more than twice the number of apples than Tom. If Sara has 11 apples, how many does Tom have?", answer: "4" },
   { question: "If f(x) = 2x + 5, what is f(3)?", answer: "11" },
@@ -58,7 +58,84 @@ const questionBank = [
   // Bird flies for 3 hours at 90 km/h = 270 km
   { question: "Two trains are 300 km apart, moving toward each other. One moves at 60 km/h, the other at 40 km/h. A bird flies back and forth between them at 90 km/h until they meet. How far does the bird travel?", answer: "270" }
 ];
-
+const scienceQuestions = [
+  { question: "What is the chemical formula for table salt?", answer: "NaCl" },
+  { question: "What type of energy is stored in a stretched rubber band?", answer: "potential energy" },
+  { question: "What is the acceleration due to gravity on Earth in m/s²?", answer: "9.8" },
+  { question: "Which organelle is known as the powerhouse of the cell?", answer: "mitochondria" },
+  { question: "What gas do plants release during photosynthesis?", answer: "oxygen" },
+  { question: "What is the SI unit of force?", answer: "newton" },
+  { question: "Which subatomic particle has a positive charge?", answer: "proton" },
+  { question: "What is the pH value of a neutral substance?", answer: "7" },
+  { question: "What type of bond involves the sharing of electron pairs?", answer: "covalent bond" },
+  { question: "What is the chemical symbol for gold?", answer: "Au" }
+  { question: "What is the speed of light in a vacuum in m/s?", answer: "3.0x10^8" },
+  { question: "What is the unit of electric current?", answer: "ampere" },
+  { question: "Which planet has the most moons in our solar system?", answer: "jupiter" },
+  { question: "What type of simple machine is a seesaw?", answer: "lever" },
+  { question: "What is the main gas involved in the greenhouse effect?", answer: "carbon dioxide" },
+  { question: "What force keeps planets in orbit around the sun?", answer: "gravity" },
+  { question: "What type of energy is associated with motion?", answer: "kinetic energy" },
+  { question: "Which part of the plant carries water from roots to leaves?", answer: "xylem" },
+  { question: "What is the smallest unit of life?", answer: "cell" },
+  { question: "What law states that energy cannot be created or destroyed?", answer: "law of conservation of energy" },
+  { question: "What is the boiling point of water in Celsius?", answer: "100" },
+  { question: "What is the chemical symbol for iron?", answer: "Fe" },
+  { question: "What is the basic unit of heredity?", answer: "gene" },
+  { question: "What is the main function of red blood cells?", answer: "carry oxygen" },
+  { question: "Which planet is closest to the Sun?", answer: "mercury" },
+  { question: "What type of star is the Sun?", answer: "yellow dwarf" }
+];
+const englishQuestions = [
+  { question: "What part of speech is the word 'quickly'?", answer: "adverb" },
+  { question: "What is the term for a word spelled the same as another but with a different meaning?", answer: "homonym" },
+  { question: "What is the superlative form of 'bad'?", answer: "worst" },
+  { question: "What is the main character of a story called?", answer: "protagonist" },
+  { question: "What type of noun is 'happiness'?", answer: "abstract" },
+  { question: "What is the meaning of the suffix '-ology'?", answer: "study of" },
+  { question: "What is the root word in 'unhappiness'?", answer: "happy" },
+  { question: "What is the literary term for hints about what will happen later in the story?", answer: "foreshadowing" },
+  { question: "What is the correct plural of 'cactus'?", answer: "cacti" },
+  { question: "What is the past participle of 'eat'?", answer: "eaten" },
+  { question: "What is the opposite of 'vertical'?", answer: "horizontal" },
+  { question: "What is the meaning of the prefix 'anti-'?", answer: "against" },
+  { question: "What is the term for a comparison using 'like' or 'as'?", answer: "simile" },
+  { question: "What is the opposite of 'fiction'?", answer: "nonfiction" }
+   { question: "What is the term for the repetition of initial consonant sounds?", answer: "alliteration" },
+  { question: "What is the past tense of 'begin'?", answer: "began" },
+  { question: "What part of speech is the word 'beauty'?", answer: "noun" },
+  { question: "What is the opposite of 'accept'?", answer: "reject" },
+  { question: "What is the meaning of the root word 'scrib'?", answer: "write" },
+  { question: "What is the plural form of 'phenomenon'?", answer: "phenomena" },
+  { question: "What is the term for a humorous play on words?", answer: "pun" },
+  { question: "What is the correct form of 'their' in the sentence: They left ___ books on the table?", answer: "their" },
+  { question: "What is the literary term for an object representing an idea?", answer: "symbolism" },
+  { question: "What is the opposite of 'include'?", answer: "exclude" }, 
+];
+const spanishQuestions = [
+  { question: "How do you say 'hello' in Spanish?", answer: "hola" },
+  { question: "How do you say 'goodbye' in Spanish?", answer: "adios" },
+  { question: "What is 'thank you' in Spanish?", answer: "gracias" },
+  { question: "How do you say 'please' in Spanish?", answer: "por favor" },
+  { question: "What is 'yes' in Spanish?", answer: "si" },
+  { question: "What is 'no' in Spanish?", answer: "no" },
+  { question: "What is 'water' in Spanish?", answer: "agua" },
+  { question: "What is 'friend' in Spanish?", answer: "amigo" },
+  { question: "How do you say 'good morning' in Spanish?", answer: "buenos dias" },
+  { question: "What is 'school' in Spanish?", answer: "escuela" },
+  { question: "What is 'red' in Spanish?", answer: "rojo" },
+  { question: "What is 'blue' in Spanish?", answer: "azul" },
+  { question: "What is 'green' in Spanish?", answer: "verde" },
+  { question: "What is 'yellow' in Spanish?", answer: "amarillo" },
+  { question: "What is 'black' in Spanish?", answer: "negro" },
+  { question: "What is 'white' in Spanish?", answer: "blanco" },
+  { question: "What is 'purple' in Spanish?", answer: "morado" },
+  { question: "What is 'pink' in Spanish?", answer: "rosado" },
+  { question: "What is 'orange' in Spanish?", answer: "naranja" },
+  { question: "What is 'brown' in Spanish?", answer: "marron" }, 
+];
+  
+  
 /* ===== Randomize questions ===== */
 // Educational Note: This uses the Fisher-Yates shuffle algorithm
 // It's like shuffling a deck of cards - swap random positions many times
