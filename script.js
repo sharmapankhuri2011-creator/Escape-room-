@@ -203,20 +203,6 @@ function shufflePick(arr, n) {
 const questions = shufflePick(selectedQuestions, Math.min(TOTAL_DOORS, selectedQuestions.length));
 
 
-/* ===== Start Game ===== */
-function startGame() {
-  $("#start-container").style.display = "none";
-  $("#game-container").style.display = "block";
-  hideMonster();
-  startTimerOnce();
-  
-  // Start with the first question
-  currentQ = 0;
-  showQuestion();
-  const currentQuestion = selectedQuestions[currentQuestionIndex];
-  document.getElementById("question").textContent = currentQuestion.question;
-}
-
 /* ===== Timer ===== */
 // Educational Note: This converts seconds to MM:SS format
 function updateTimer() {
