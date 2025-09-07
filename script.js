@@ -200,8 +200,7 @@ function shufflePick(arr, n) {
   }
   return a.slice(0, n);  // Return first n elements
 }
-const questions = shufflePick(selectedQuestions, Math.min(TOTAL_DOORS, selectedQuestions.length));
-
+questions = shufflePick(selectedQuestions, Math.min(TOTAL_DOORS, selectedQuestions.length));
 
 /* ===== Timer ===== */
 // Educational Note: This converts seconds to MM:SS format
