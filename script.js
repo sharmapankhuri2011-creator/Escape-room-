@@ -85,7 +85,7 @@ const scienceQuestions = [
   { question: "Which subatomic particle has a positive charge?", answer: "proton" },
   { question: "What is the pH value of a neutral substance?", answer: "7" },
   { question: "What type of bond involves the sharing of electron pairs?", answer: "covalent bond" },
-  { question: "What is the chemical symbol for gold?", answer: "Au" }
+  { question: "What is the chemical symbol for gold?", answer: "Au" }, 
   { question: "What is the speed of light in a vacuum in m/s?", answer: "3.0x10^8" },
   { question: "What is the unit of electric current?", answer: "ampere" },
   { question: "Which planet has the most moons in our solar system?", answer: "jupiter" },
@@ -117,7 +117,7 @@ const englishQuestions = [
   { question: "What is the opposite of 'vertical'?", answer: "horizontal" },
   { question: "What is the meaning of the prefix 'anti-'?", answer: "against" },
   { question: "What is the term for a comparison using 'like' or 'as'?", answer: "simile" },
-  { question: "What is the opposite of 'fiction'?", answer: "nonfiction" }
+  { question: "What is the opposite of 'fiction'?", answer: "nonfiction" }, 
    { question: "What is the term for the repetition of initial consonant sounds?", answer: "alliteration" },
   { question: "What is the past tense of 'begin'?", answer: "began" },
   { question: "What part of speech is the word 'beauty'?", answer: "noun" },
@@ -171,7 +171,7 @@ const historyQuestions = [
   { question: "What was the Great Depression primarily caused by?", answer: "stock market crash" },
   { question: "What year did the United States enter World War II?", answer: "1941" },
   { question: "Who was the U.S. President during World War II?", answer: "franklin d roosevelt" },
-  { question: "Which U.S. state was the last to join the union?", answer: "hawaii" }
+  { question: "Which U.S. state was the last to join the union?", answer: "hawaii" },
 ];
 
 /* ===== If-then Statments for what happens when you click on each subject button ==== */ 
