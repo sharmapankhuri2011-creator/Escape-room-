@@ -23,22 +23,11 @@ const questionEl = $("#question");      // Where questions appear
 const answerEl = $("#answer");          // The input box for answers
 const keysContainer = $("#keys-container"); // Where key icons appear
 
-/* ==== Subject change === */
-let selectedQuestions = [];
-
-document.querySelectorAll(".subject-btn").forEach(btn => {
-  btn.addEventListener("click", () => {
-    const subject = btn.dataset.subject;
-
-    if (subject === "math") selectedQuestions = mathQuestions;
-    else if (subject === "science") selectedQuestions = scienceQuestions;
-    else if (subject === "english") selectedQuestions = englishQuestions;
-    else if (subject === "history") selectedQuestions = historyQuestions;
-    else if (subject === "spanish") selectedQuestions = spanishQuestions;
-
-    startGame();
-  });
-});
+/* ==== Subject Selection Variables ==== */
+// Educational Note: We need to track which questions to use and if subject is locked
+let selectedQuestions = [];  // This will hold the questions for the chosen subject
+let subjectLocked = false;   // Once true, player can't change subject in this session
+let questions = [];           // The actual 10 questions we'll use in this game
 
 /* ===== Question bank ===== */
 const mathQuestions = [
@@ -174,20 +163,89 @@ const historyQuestions = [
   { question: "Which U.S. state was the last to join the union?", answer: "hawaii" },
 ];
 
-/* ===== If-then Statments for what happens when you click on each subject button ==== */ 
-function startGame(subject) {
-  if (subject === "science") {
-    selectedQuestions = scienceQuestions;
-  } else if (subject === "english") {
-    selectedQuestions = englishQuestions;
-  } else if (subject === "spanish") {
-    selectedQuestions = spanishQuestions;
-  } else if (subject === "math") {
-    selectedQuestions = mathQuestions;
-  } else if (subject === "history") {
-    selectedQuestions = historyQuestions;
+/* ===== Game Start Functions ===== */
+// Educational Note: We now have THREE stages:
+// 1. Portal click -> calls startGame()
+// 2. Subject selection -> calls startGameWithSubject(subject)
+// 3. Game begins!
+
+// FUNCTION 1: Called when the magical portal "Enter" button is clicked
+function startGame() {
+  console.log("Portal clicked! Moving to subject selection...");
+  
+  // Check if player already selected a subject (for going back prevention)
+  if (subjectLocked) {
+    console.log("Subject already locked - can't change it!");
+    // If they somehow got back to portal, just show the game again
+    $('#start-container').style.display = 'none';
+    $('#game-container').style.display = 'block';
+    return;  // Exit the function early
   }
   
+  // Hide the magical portal (using $ shortcut)
+  $('#start-container').style.display = 'none';
+  
+  // Show the subject selection screen
+  $('#subject-selection').style.display = 'flex';
+}
+
+// FUNCTION 2: Called when a subject button is clicked
+function startGameWithSubject(subject) {
+  console.log("Subject selected: " + subject);
+  
+  // Lock the subject so player can't go back and change it
+  subjectLocked = true;
+  
+  // Hide subject selection screen (no going back!)
+  $('#subject-selection').style.display = 'none';
+  
+  // Choose the right question bank based on subject
+  // Educational Note: if-else chain checks each possibility
+  if (subject === 'math') {
+    selectedQuestions = mathQuestions;
+  } else if (subject === 'science') {
+    selectedQuestions = scienceQuestions;
+  } else if (subject === 'english') {
+    selectedQuestions = englishQuestions;
+  } else if (subject === 'history') {
+    selectedQuestions = historyQuestions;
+  } else if (subject === 'spanish') {
+    selectedQuestions = spanishQuestions;
+  } else {
+    // Default fallback - just in case something goes wrong
+    console.log("Unknown subject, defaulting to math");
+    selectedQuestions = mathQuestions;
+  }
+  
+  // Shuffle and pick 10 random questions from the subject
+  questions = shufflePick(selectedQuestions, TOTAL_DOORS);
+  console.log("Selected " + questions.length + " questions for the game");
+  
+  // Reset all game variables to starting values
+  keys = 0;                                            // No keys collected yet
+  currentQ = -1;                                       // Start before first question
+  timeLeft = 240;                                      // Reset timer to 4 minutes
+  timerStarted = false;                                // Timer hasn't started yet
+  solvedQuestions = new Array(TOTAL_DOORS).fill(false); // No questions solved yet
+  
+  // Clear any leftover content from previous games
+  keysContainer.innerHTML = '';  // Remove old key icons
+  msg.textContent = '';          // Clear old messages
+  answerEl.value = '';           // Clear answer box
+  
+  // Reset door image to first door
+  doorImg.src = 'door1.png';
+  
+  // Show the game container
+  $('#game-container').style.display = 'block';
+  
+  // Show the first question
+  nextQuestion();
+  
+  // Start the countdown timer
+  startTimerOnce();
+}
+
 /* ===== Randomize questions ===== */
 // Educational Note: This uses the Fisher-Yates shuffle algorithm
 // It's like shuffling a deck of cards - swap random positions many times
@@ -200,7 +258,6 @@ function shufflePick(arr, n) {
   }
   return a.slice(0, n);  // Return first n elements
 }
-questions = shufflePick(selectedQuestions, Math.min(TOTAL_DOORS, selectedQuestions.length));
 
 /* ===== Timer ===== */
 // Educational Note: This converts seconds to MM:SS format
@@ -406,6 +463,34 @@ doorImg.src = "door1.png";
 answerEl.addEventListener("keydown", (e) => {
   if (e.key === "Enter") checkAnswer();
 });
+
+/* ===== Back Button Handler ===== */
+// Educational Note: This prevents the browser from going to blank pages
+// The popstate event fires when user clicks browser back/forward buttons
+window.addEventListener('popstate', function(event) {
+  console.log("Back/forward button pressed");
+  
+  // If game is in progress, stay on the game
+  if (subjectLocked) {
+    // Hide everything first
+    $('#start-container').style.display = 'none';
+    $('#subject-selection').style.display = 'none';
+    // Show the game
+    $('#game-container').style.display = 'block';
+  } else {
+    // Otherwise show the portal
+    $('#game-container').style.display = 'none';
+    $('#subject-selection').style.display = 'none';
+    $('#start-container').style.display = 'block';
+  }
+});
+
+// Add a state to browser history when page loads
+// This helps us control what happens when back button is pressed
+window.history.pushState({page: 'portal'}, '', '');
+
+// Educational Note: pushState adds an entry to browser history without reloading
+// This gives us control over the back button behavior
 
 /* ===== Confetti Animation ===== */
 // Educational Note: This creates a fun particle effect for winning!
