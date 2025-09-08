@@ -67,26 +67,44 @@
     <p>💀 The monster caught you!</p>
   </div>
 
+  <!-- Subject Selection Screen (hidden initially) -->
+  <!-- Educational Note: This screen appears AFTER the portal, BEFORE the game -->
+  <!-- We hide it with display:none and show it with JavaScript -->
+  <div id="subject-selection" style="display: none;">
+    <div class="subject-container">
+      <h2>Choose Your Challenge</h2>
+      <p class="subject-instruction">Select a subject to test your knowledge!</p>
+      
+      <!-- Subject buttons - each calls startGameWithSubject() with a different subject -->
+      <!-- Educational Note: onclick="" connects HTML buttons to JavaScript functions -->
+      <div class="subject-buttons">
+        <button class="subject-btn" onclick="startGameWithSubject('math')">
+          <span class="subject-icon">📐</span>
+          <span class="subject-name">Math</span>
+        </button>
+        <button class="subject-btn" onclick="startGameWithSubject('science')">
+          <span class="subject-icon">🔬</span>
+          <span class="subject-name">Science</span>
+        </button>
+        <button class="subject-btn" onclick="startGameWithSubject('english')">
+          <span class="subject-icon">📚</span>
+          <span class="subject-name">English</span>
+        </button>
+        <button class="subject-btn" onclick="startGameWithSubject('history')">
+          <span class="subject-icon">🏛️</span>
+          <span class="subject-name">History</span>
+        </button>
+        <button class="subject-btn" onclick="startGameWithSubject('spanish')">
+          <span class="subject-icon">🇪🇸</span>
+          <span class="subject-name">Spanish</span>
+        </button>
+      </div>
+      
+      <p class="timer-reminder">⏰ Remember: You'll have only 4 minutes to escape!</p>
+    </div>
+  </div>
+
   <!-- This loads our JavaScript code -->
   <script src="script.js"></script>
 </body>
 </html>
-
-<!-- This is what causes the groups of different subjects to show up -->
-<div id="subject-container">
-  <h2>Select a Subject</h2>
-  <button class="subject-btn" data-subject="math">Math</button>
-  <button class="subject-btn" data-subject="science">Science</button>
-  <button class="subject-btn" data-subject="english">English</button>
-  <button class="subject-btn" data-subject="history">History</button>
-  <button class="subject-btn" data-subject="spanish">Spanish</button>
-</div>
-
-<!-- This is what causes the colors of the subject options to be red -->
-<button class="subject-btn" onclick="startGame('science')">Science</button>
-<button class="subject-btn" onclick="startGame('english')">English</button>
-<button class="subject-btn" onclick="startGame('spanish')">Spanish</button>
-<button class="subject-btn" onclick="startGame('math')">Math</button>
-<button class="subject-btn" onclick="startGame('history')">History</button>
-
-

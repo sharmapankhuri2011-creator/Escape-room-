@@ -415,6 +415,111 @@ button:hover {
   }
 }
 
+/* ===== Subject Selection Screen ===== */
+/* Educational Note: This screen appears between portal and game */
+#subject-selection {
+  display: none;  /* Hidden by default */
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 80vh;
+  animation: fade-in 1s ease-in;  /* Smooth fade-in effect */
+}
+
+.subject-container {
+  background: rgba(0, 0, 0, 0.8);  /* Dark semi-transparent background */
+  border-radius: 20px;
+  padding: 40px;
+  max-width: 800px;
+  /* Magical glow effect matching the portal theme */
+  box-shadow: 
+    0 0 30px rgba(106, 13, 173, 0.5),
+    inset 0 0 20px rgba(255, 204, 0, 0.1);
+}
+
+.subject-container h2 {
+  color: #ffcc00;  /* Golden color like the main title */
+  font-family: 'Dancing Script', cursive;  /* Match the magical font */
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+  text-shadow: 2px 2px 5px rgba(0,0,0,0.8);
+}
+
+.subject-instruction {
+  color: #ffffff;
+  font-size: 1.2rem;
+  margin-bottom: 30px;
+  opacity: 0.9;
+}
+
+/* Grid layout for subject buttons */
+/* Educational Note: CSS Grid makes it easy to arrange items in rows/columns */
+.subject-buttons {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);  /* 3 columns */
+  gap: 20px;  /* Space between buttons */
+  margin: 30px 0;
+  width: 100%;
+}
+
+/* Individual subject button styling */
+.subject-btn {
+  display: flex;
+  flex-direction: column;  /* Stack icon above text */
+  align-items: center;
+  padding: 20px;
+  /* Pretty gradient background */
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: 2px solid #ffcc00;
+  border-radius: 15px;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;  /* Smooth hover effects */
+  min-height: 120px;
+  font-family: Arial, sans-serif;  /* Clear font for readability */
+}
+
+/* Hover effect - button lifts up */
+.subject-btn:hover {
+  transform: translateY(-5px);  /* Move up slightly */
+  box-shadow: 0 10px 30px rgba(102, 126, 234, 0.5);
+  /* Reverse gradient for variety */
+  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+}
+
+/* Emoji icons for each subject */
+.subject-icon {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+}
+
+/* Subject name text */
+.subject-name {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+/* Timer warning at bottom */
+.timer-reminder {
+  color: #ff6b6b;
+  font-size: 1.1rem;
+  margin-top: 20px;
+  /* Reuse the warning pulse animation from earlier */
+  animation: warning-pulse 1.5s ease-in-out infinite;
+}
+
+/* Make it responsive for smaller screens */
+@media (max-width: 600px) {
+  .subject-buttons {
+    grid-template-columns: repeat(2, 1fr);  /* 2 columns on mobile */
+  }
+  
+  .subject-container {
+    padding: 20px;
+    margin: 10px;
+  }
+}
+
 
 
 
